@@ -172,8 +172,7 @@ int ClangLoader::parse(unique_ptr<llvm::Module> *mod, TableStorage &ts,
   vector<string> kflags;
   if (kbuild_helper.get_flags(un.machine, &kflags))
     return -1;
-  if (flags_ & DEBUG_SOURCE)
-    flags_cstr.push_back("-g");
+  flags_cstr.push_back("-g");
   for (auto it = kflags.begin(); it != kflags.end(); ++it)
     flags_cstr.push_back(it->c_str());
 
