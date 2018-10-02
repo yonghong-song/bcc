@@ -632,8 +632,12 @@ int BPFModule::finalize() {
     return -1;
   }
 
+#if LLVM_MAJOR_VERSION >= 8
+  engine_->setProcessAllSections(true);
+#else
   if (flags_ & DEBUG_SOURCE)
     engine_->setProcessAllSections(true);
+#endif
 
   if (int rc = run_pass_manager(*mod))
     return rc;
@@ -644,6 +648,21 @@ int BPFModule::finalize() {
     SourceDebugger src_debugger(mod, *sections_p, FN_PREFIX, mod_src_,
                                 src_dbg_fmap_);
     src_debugger.dump();
+  }
+
+  {
+    // The bcc main file is memory mapped in clang, so llvm cannot
+    // get the source, we have source here mod_src_ so let parse
+    // .BTF and .BTF.ext to add actual source lines.
+    for (auto section : *sections_p) {
+      if (strcmp(".BTF", section.first.c_str()) == 0) {
+        fprintf(stderr, "found .BTF section, size %ld\n", get<1>(section.second));
+      }
+      if (strcmp(".BTF.ext", section.first.c_str()) != 0)
+        continue;
+      fprintf(stderr, "found .BTF.ext section, size %ld\n", get<1>(section.second));
+      // Check .BTF.ext line_info section
+    }
   }
 
   if (!rw_engine_enabled_) {
