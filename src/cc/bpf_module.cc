@@ -632,8 +632,12 @@ int BPFModule::finalize() {
     return -1;
   }
 
+#if LLVM_MAJOR_VERSION >= 8
+  engine_->setProcessAllSections(true);
+#else
   if (flags_ & DEBUG_SOURCE)
     engine_->setProcessAllSections(true);
+#endif
 
   if (int rc = run_pass_manager(*mod))
     return rc;

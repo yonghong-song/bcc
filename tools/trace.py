@@ -756,7 +756,8 @@ trace -I 'linux/fs_struct.h' 'mntns_install "users = %d", $task->fs->users'
                         if self.args.verbose:
                                 print(probe.usdt.get_text())
                         usdt_contexts.append(probe.usdt)
-                self.bpf = BPF(text=self.program, usdt_contexts=usdt_contexts)
+                # debug=5 will dump IR before invoking pass manager and the compilation flags
+                self.bpf = BPF(text=self.program, usdt_contexts=usdt_contexts, debug=5)
                 for probe in self.probes:
                         if self.args.verbose:
                                 print(probe)

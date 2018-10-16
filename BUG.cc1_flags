@@ -1,0 +1,58 @@
+clang -cc1 -triple x86_64-unknown-linux-gnu -emit-llvm-bc -emit-llvm-uselists -disable-free -disable-llvm-verifier -discard-value-names -main-file-name main.c -mrelocation-model static -mthread-model posix -fmath-errno -masm-verbose -mconstructor-aliases -fuse-init-array -target-cpu x86-64 -dwarf-column-info -gembed-source -debug-info-kind=limited -dwarf-version=5 -debugger-tuning=gdb -momit-leaf-frame-pointer -coverage-notes-file /usr/src/kernels/4.11.3-70_fbk18_4116_g1cf3f1a0ca4f/main.gcno -nostdsysteminc -nobuiltininc -resource-dir lib/clang/8.0.0 -isystem /virtual/lib/clang/include -include ./include/linux/kconfig.h -include /virtual/include/bcc/bpf.h -include /virtual/include/bcc/helpers.h -isystem /virtual/include -I /data/users/yhs/work/github/bcc/tools -D __BPF_TRACING__ -I /lib/modules/4.11.3-70_fbk18_4116_g1cf3f1a0ca4f/build/arch/x86/include -I /lib/modules/4.11.3-70_fbk18_4116_g1cf3f1a0ca4f/build/arch/x86/include/generated/uapi -I /lib/modules/4.11.3-70_fbk18_4116_g1cf3f1a0ca4f/build/arch/x86/include/generated -I /lib/modules/4.11.3-70_fbk18_4116_g1cf3f1a0ca4f/build/include -I /lib/modules/4.11.3-70_fbk18_4116_g1cf3f1a0ca4f/build/./arch/x86/include/uapi -I /lib/modules/4.11.3-70_fbk18_4116_g1cf3f1a0ca4f/build/arch/x86/include/generated/uapi -I /lib/modules/4.11.3-70_fbk18_4116_g1cf3f1a0ca4f/build/include/uapi -I /lib/modules/4.11.3-70_fbk18_4116_g1cf3f1a0ca4f/build/include/generated -I /lib/modules/4.11.3-70_fbk18_4116_g1cf3f1a0ca4f/build/include/generated/uapi -I ./arch/x86/include -I arch/x86/include/generated/uapi -I arch/x86/include/generated -I include -I ./arch/x86/include/uapi -I arch/x86/include/generated/uapi -I ./include/uapi -I include/generated/uapi -D __KERNEL__ -D __HAVE_BUILTIN_BSWAP16__ -D __HAVE_BUILTIN_BSWAP32__ -D __HAVE_BUILTIN_BSWAP64__ -O2 -Wno-deprecated-declarations -Wno-gnu-variable-sized-type-not-at-end -Wno-pragma-once-outside-header -Wno-address-of-packed-member -Wno-unknown-warning-option -Wno-unused-value -Wno-pointer-sign -fdebug-compilation-dir /usr/src/kernels/4.11.3-70_fbk18_4116_g1cf3f1a0ca4f -ferror-limit 19 -fmessage-length 0 -fobjc-runtime=gcc -fdiagnostics-show-option -vectorize-loops -vectorize-slp -o main.bc -x c /virtual/main.c -faddrsig
+#if defined(BPF_LICENSE)
+#error BPF_LICENSE cannot be specified through cflags
+#endif
+#if !defined(CONFIG_CC_STACKPROTECTOR)
+#if defined(CONFIG_CC_STACKPROTECTOR_AUTO) \
+    || defined(CONFIG_CC_STACKPROTECTOR_REGULAR) \
+    || defined(CONFIG_CC_STACKPROTECTOR_STRONG)
+#define CONFIG_CC_STACKPROTECTOR
+#endif
+#endif
+
+#include <linux/ptrace.h>
+#include <linux/sched.h>        /* For TASK_COMM_LEN */
+
+
+struct probe_SyS_nanosleep_1_data_t
+{
+
+
+        u32 tgid;
+        u32 pid;
+        char comm[TASK_COMM_LEN];
+
+
+
+};
+
+BPF_PERF_OUTPUT(probe_SyS_nanosleep_1_events);
+
+
+__attribute__((section(".bpf.fn.probe_SyS_nanosleep_1")))
+int probe_SyS_nanosleep_1(struct pt_regs *ctx)
+{
+
+        u64 __pid_tgid = bpf_get_current_pid_tgid();
+        u32 __tgid = __pid_tgid >> 32;
+        u32 __pid = __pid_tgid; // implicit cast to u32 for bottom half
+        
+        if (__tgid == 3027415) { return 0; }
+                
+        
+        
+        if (!(1)) return 0;
+
+        struct probe_SyS_nanosleep_1_data_t __data = {0};
+        
+        
+        __data.tgid = __tgid;
+        __data.pid = __pid;
+        bpf_get_current_comm(&__data.comm, sizeof(__data.comm));
+
+
+        bpf_perf_event_output(ctx, bpf_pseudo_fd(1, 3), CUR_CPU_IDENTIFIER, &__data, sizeof(__data));
+        return 0;
+}
+
+#include <bcc/footer.h>

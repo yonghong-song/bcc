@@ -1,0 +1,19 @@
+#0  0x00007fe922d0f7c6 in __memcpy_ssse3_back () from /lib64/libc.so.6
+#1  0x00007fe91a8e9657 in llvm::MCObjectStreamer::EmitBytes(llvm::StringRef) () from /lib64/libbcc.so.0
+#2  0x00007fe91a8d60e1 in emitOneV5FileEntry(llvm::MCStreamer*, llvm::MCDwarfFile const&, bool, bool, llvm::Optional<llvm::MCDwarfLineStr>&) () from /lib64/libbcc.so.0
+#3  0x00007fe91a8d63fc in llvm::MCDwarfLineTableHeader::emitV5FileDirTables(llvm::MCStreamer*, llvm::Optional<llvm::MCDwarfLineStr>&, llvm::StringRef) const () from /lib64/libbcc.so.0
+#4  0x00007fe91a8d6720 in llvm::MCDwarfLineTableHeader::Emit(llvm::MCStreamer*, llvm::MCDwarfLineTableParams, llvm::ArrayRef<char>, llvm::Optional<llvm::MCDwarfLineStr>&) const () from /lib64/libbcc.so.0
+#5  0x00007fe91a8d67ee in llvm::MCDwarfLineTableHeader::Emit(llvm::MCStreamer*, llvm::MCDwarfLineTableParams, llvm::Optional<llvm::MCDwarfLineStr>&) const () from /lib64/libbcc.so.0
+#6  0x00007fe91a8d68ae in llvm::MCDwarfLineTable::EmitCU(llvm::MCObjectStreamer*, llvm::MCDwarfLineTableParams, llvm::Optional<llvm::MCDwarfLineStr>&) const () from /lib64/libbcc.so.0
+#7  0x00007fe91a8da984 in llvm::MCDwarfLineTable::Emit(llvm::MCObjectStreamer*, llvm::MCDwarfLineTableParams) () from /lib64/libbcc.so.0
+#8  0x00007fe91a8e90a9 in llvm::MCObjectStreamer::FinishImpl() () from /lib64/libbcc.so.0
+#9  0x00007fe91a8f1a29 in llvm::MCStreamer::Finish() () from /lib64/libbcc.so.0
+#10 0x00007fe919fa9ac1 in llvm::AsmPrinter::doFinalization(llvm::Module&) () from /lib64/libbcc.so.0
+#11 0x00007fe91aa635a5 in llvm::FPPassManager::doFinalization(llvm::Module&) () from /lib64/libbcc.so.0
+#12 0x00007fe91aa6dede in llvm::legacy::PassManagerImpl::run(llvm::Module&) () from /lib64/libbcc.so.0
+#13 0x00007fe919cda53b in llvm::MCJIT::emitObject(llvm::Module*) () from /lib64/libbcc.so.0
+#14 0x00007fe919cdace5 in llvm::MCJIT::generateCodeForModule(llvm::Module*) () from /lib64/libbcc.so.0
+#15 0x00007fe919cd7390 in llvm::MCJIT::finalizeObject() () from /lib64/libbcc.so.0
+#16 0x00007fe9187cb775 in ebpf::BPFModule::finalize() () from /lib64/libbcc.so.0
+#17 0x00007fe9187c5ba4 in bpf_module_create_c_from_string () from /lib64/libbcc.so.0
+.....

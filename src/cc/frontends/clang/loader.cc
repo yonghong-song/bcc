@@ -172,8 +172,14 @@ int ClangLoader::parse(unique_ptr<llvm::Module> *mod, TableStorage &ts,
   vector<string> kflags;
   if (kbuild_helper.get_flags(un.machine, &kflags))
     return -1;
+#if LLVM_MAJOR_VERSION >= 8
+  flags_cstr.push_back("-g");
+  flags_cstr.push_back("-gdwarf-5");
+  flags_cstr.push_back("-gembed-source");
+#else
   if (flags_ & DEBUG_SOURCE)
     flags_cstr.push_back("-g");
+#endif
   for (auto it = kflags.begin(); it != kflags.end(); ++it)
     flags_cstr.push_back(it->c_str());
 
